@@ -1,51 +1,42 @@
 'use client';
 
-import { Button, Stack, TextField, Link, Box } from '@mui/material';
+import { Button, Link, Stack, TextField } from '@mui/material';
 import NextLink from 'next/link';
+import { useFormState } from 'react-dom';
 import createUser from './create-user';
-import { useActionState } from 'react';
 
-export default function SignUp() {
-  const [state, formAction] = useActionState(createUser, { error: '' });
+export default function Signup() {
+  const [state, formAction] = useFormState(createUser, { error: '' });
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
-      <form action={formAction} style={{ width: '100%', maxWidth: '400px' }}>
-        <Stack spacing={3}>
-          <TextField
-            fullWidth
-            helperText={state.error}
-            error={!!state.error}
-            name='email'
-            label='Email'
-            variant='outlined'
-            type='email'
-          />
-          <TextField
-            fullWidth
-            helperText={state.error}
-            error={!!state.error}
-            name='password'
-            label='Password'
-            variant='outlined'
-            type='password'
-          />
-          <Button type='submit' variant='contained' color='primary' size='large' sx={{ py: 1.5 }}>
-            Sign Up
-          </Button>
-          <Link
-            component={NextLink}
-            href='/auth/login'
-            sx={{
-              textAlign: 'center',
-              display: 'block',
-              mt: 2,
-            }}
-          >
-            Already have an account? Login
-          </Link>
-        </Stack>
-      </form>
-    </Box>
+    <form action={formAction} className='w-full max-w-xs'>
+      <Stack spacing={2}>
+        <TextField
+          name='email'
+          label='Email'
+          variant='outlined'
+          type='email'
+          error={!!state.error}
+          helperText={state.error && state.error.includes('email') ? state.error : ''}
+        />
+        <TextField
+          name='password'
+          label='Password'
+          variant='outlined'
+          type='password'
+          error={!!state.error}
+          helperText={state.error && state.error.includes('password') ? state.error : ''}
+        />
+        {state.error && !state.error.includes('email') && !state.error.includes('password') && (
+          <div className='text-red-500 text-sm'>{state.error}</div>
+        )}
+        <Button type='submit' variant='contained'>
+          Signup
+        </Button>
+        <Link component={NextLink} href='/auth/login' className='self-center'>
+          Login
+        </Link>
+      </Stack>
+    </form>
   );
 }
