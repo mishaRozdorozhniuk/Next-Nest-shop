@@ -2,7 +2,7 @@
 
 // import { cookies } from 'next/headers';
 // import { API_URL } from './constants/api';
-import { GET } from './util/fetch';
+import { GET } from './common/util/fetch';
 
 export default async function getMe() {
   // Also one of the options:
@@ -16,6 +16,5 @@ export default async function getMe() {
 
   // return me.json();
 
-
-  return GET('users/me')
+  return GET('users/me');
 }

@@ -1,13 +1,16 @@
 'use server';
 
-import { FormError } from '@/app/common/form-error.interface';
-import { API_URL } from '@/app/constants/api';
-import { getErrorMessage } from '@/app/util/errors';
+import { FormError } from '@/app/common/interfaces/form-error.interface';
+import { API_URL } from '@/app/common/constants/api';
+import { getErrorMessage } from '@/app/common/util/errors';
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { AUTHENTICATION_COOKIE } from '../auth-cookie';
 
-export default async function login(_prevState: FormError, formData: FormData) {
+export default async function login(
+  prevState: { error: string } | { success: boolean },
+  formData: FormData,
+) {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -24,17 +27,19 @@ export default async function login(_prevState: FormError, formData: FormData) {
     };
   }
 
-  setAuthCookie(res);
-  redirect('/');
+  await setAuthCookie(res);
+
+  return { success: true };
 }
 
-const setAuthCookie = (response: Response) => {
+const setAuthCookie = async (response: Response) => {
   const responseCookies = response.headers.get('Set-Cookie');
 
   if (responseCookies) {
     const token = responseCookies.split(';')[0].split('=')[1];
-    cookies().set({
-      name: 'Authentication',
+    const cookieStore = await cookies();
+    cookieStore.set({
+      name: AUTHENTICATION_COOKIE,
       value: token,
       secure: true,
       httpOnly: true,

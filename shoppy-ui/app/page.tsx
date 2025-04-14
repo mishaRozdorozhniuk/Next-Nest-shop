@@ -1,8 +1,8 @@
-import getMe from './get-me';
+// import getMe from './get-me';
 
 export default async function Home() {
-  const me = await getMe();
+  // const me = await getMe();
 
-  console.log(me);
+  // console.log(me);
   return <></>;
 }

@@ -2,11 +2,19 @@
 
 import { Button, Link, Stack, TextField } from '@mui/material';
 import NextLink from 'next/link';
-import { useFormState } from 'react-dom';
 import createUser from './create-user';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Signup() {
-  const [state, formAction] = useFormState(createUser, { error: '' });
+  const [state, formAction] = useActionState(createUser, { error: '' });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      router.push('/');
+    }
+  }, [state.success, router]);
 
   return (
     <form action={formAction} className='w-full max-w-xs'>

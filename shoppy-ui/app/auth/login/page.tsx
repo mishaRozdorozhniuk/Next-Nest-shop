@@ -3,10 +3,19 @@
 import { Button, Stack, TextField, Link } from '@mui/material';
 import NextLink from 'next/link';
 import login from './login';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Login() {
-  const [state, formAction] = useFormState(login, { error: '' });
+  const [state, formAction] = useActionState(login, { error: '' });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      router.push('/');
+    }
+  }, [state.success, router]);
 
   return (
     <form action={formAction} className='w-full max-w-xs'>
