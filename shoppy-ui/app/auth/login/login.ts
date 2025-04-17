@@ -1,6 +1,5 @@
 'use server';
 
-import { FormError } from '@/app/common/interfaces/form-error.interface';
 import { API_URL } from '@/app/common/constants/api';
 import { getErrorMessage } from '@/app/common/util/errors';
 import { jwtDecode } from 'jwt-decode';

@@ -10,8 +10,6 @@ const getHeaders = async () => {
 };
 
 export const POST = async (url: string, body: FormData) => {
-  console.log('body', body);
-
   const formObject = Object.fromEntries(body.entries());
 
   const res = await fetch(`${API_URL}/${url}`, {
@@ -23,8 +21,7 @@ export const POST = async (url: string, body: FormData) => {
     body: JSON.stringify(formObject),
   });
 
-  const parsedRes = await res.json();
-  console.log('parsedRes', parsedRes);
+  const parsedRes = res.headers.get('Content-Length') === '0' ? {} : await res.json();
 
   if (!res.ok) {
     return {
