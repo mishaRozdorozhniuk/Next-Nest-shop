@@ -32,13 +32,16 @@ export const POST = async (url: string, body: FormData) => {
   return { error: '' };
 };
 
-export const GET = async (url: string) => {
+export const GET = async <T>(url: string, tags?: string[]) => {
   const res = await fetch(`${API_URL}/${url}`, {
     method: 'GET',
     headers: {
       ...(await getHeaders()),
     },
+    next: {
+      tags,
+    },
   });
 
-  return res.json();
+  return res.json() as T;
 };
