@@ -7,7 +7,7 @@ export default async function Products() {
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-      {products.map((product: any) => (
+      {products?.map((product: any) => (
         <div key={product.id} className='h-full'>
           <Product product={product} />
         </div>

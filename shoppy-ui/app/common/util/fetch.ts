@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { API_URL } from '../constants/api';
 import { getErrorMessage } from './errors';
 
-const getHeaders = async () => {
+export const getHeaders = async () => {
   const cookieStore = await cookies();
   return {
     Cookie: cookieStore.toString(),
@@ -26,6 +26,23 @@ export const POST = async (url: string, body: FormData) => {
   if (!res.ok) {
     return {
       error: getErrorMessage(parsedRes),
+    };
+  }
+
+  return { error: '', data: parsedRes };
+};
+
+export const DELETE = async (url: string) => {
+  const res = await fetch(`${API_URL}/${url}`, {
+    method: 'DELETE',
+    headers: {
+      ...(await getHeaders()),
+    },
+  });
+
+  if (!res.ok) {
+    return {
+      error: getErrorMessage(await res.json()),
     };
   }
 
