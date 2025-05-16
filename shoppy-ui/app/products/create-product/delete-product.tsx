@@ -23,8 +23,11 @@ export default function DeleteProduct({ productId }: { productId: number }) {
   };
 
   return (
-    <button className='text-black' onClick={handleDeleteProduct}>
-      delete-product
+    <button
+      className='px-4 py-2 mt-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors'
+      onClick={handleDeleteProduct}
+    >
+      Delete
     </button>
   );
 }

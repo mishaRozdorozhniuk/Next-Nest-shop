@@ -9,8 +9,10 @@ export const getHeaders = async () => {
   };
 };
 
-export const POST = async (url: string, body: FormData) => {
-  const formObject = Object.fromEntries(body.entries());
+export const POST = async (url: string, body: FormData | object) => {
+  const bodyIsFormData = body instanceof FormData ? Object.fromEntries(body.entries()) : body;
+
+  // const formObject = Object.fromEntries(body.entries());
 
   const res = await fetch(`${API_URL}/${url}`, {
     method: 'POST',
@@ -18,7 +20,7 @@ export const POST = async (url: string, body: FormData) => {
       'Content-Type': 'application/json',
       ...(await getHeaders()),
     },
-    body: JSON.stringify(formObject),
+    body: JSON.stringify(bodyIsFormData),
   });
 
   const parsedRes = res.headers.get('Content-Length') === '0' ? {} : await res.json();

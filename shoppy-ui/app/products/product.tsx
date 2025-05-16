@@ -1,8 +1,11 @@
+"use client";
+
 import Image from 'next/image';
 import { API_URL } from '../common/constants/api';
-import deleteProduct from './actions/delete-product';
-import { revalidateTag } from 'next/cache';
+
 import DeleteProduct from './create-product/delete-product';
+import { getProductImage } from './product-image';
+import { useRouter } from 'next/navigation';
 
 interface IProduct {
   id: number;
@@ -18,26 +21,20 @@ interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
+  const router = useRouter();
+
   if (!product) return <div>Loading...</div>;
 
-  // const handleDeleteProduct = async () => {
-  //   const response = await deleteProduct(product.id);
-
-  //   if (response.error) {
-  //     console.error('Error deleting product:', response.error);
-  //   } else {
-  //     revalidateTag('products');
-  //     console.log('Product deleted successfully');
-  //   }
-  // };
-
   return (
-    <div className='flex flex-col overflow-hidden rounded-lg shadow-lg bg-white hover:shadow-xl transition-all duration-300'>
+    <div
+      onClick={() => router.push(`/products/${product.id}`)}
+      className='flex cursor-pointer flex-col overflow-hidden rounded-lg shadow-lg bg-white hover:shadow-xl transition-all duration-300'
+    >
       <div className='p-6 flex flex-col flex-grow'>
         <h2 className='text-xl font-bold text-gray-800 mb-2'>{product.name}</h2>
         {product.imageExists && API_URL && (
           <Image
-            src={`${API_URL}/products/${product.id}.jpg`}
+            src={getProductImage(product.id)}
             width={500}
             height={500}
             className='w-full h-auto'
@@ -52,12 +49,6 @@ export default function Product({ product }: ProductProps) {
         <button className='px-4 py-2 mt-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors'>
           Add to Cart
         </button>
-        {/* <button
-          // onClick={handleDeleteProduct}
-          className='px-4 py-2 mt-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors'
-        >
-          Delete
-        </button> */}
         <DeleteProduct productId={product.id} />
       </div>
     </div>

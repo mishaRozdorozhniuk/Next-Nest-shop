@@ -21,7 +21,7 @@ import { ProductsService } from './products.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import fs from 'fs';
+import { PRODUCT_IMAGES } from './product-images';
 
 @Controller('products')
 export class ProductsController {
@@ -41,7 +41,7 @@ export class ProductsController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: 'public/products',
+        destination: PRODUCT_IMAGES,
         filename: (req, file, callback) => {
           callback(
             null,
@@ -83,5 +83,17 @@ export class ProductsController {
       user.userId,
       parsedProductId,
     );
+  }
+
+  @Get(':productId')
+  @UseGuards(JwtAuthGuard)
+  async getProduct(@Param('productId') productId: string) {
+    const parsedProductId = parseInt(productId, 10);
+    console.log('Product ID: Controller', productId);
+
+    if (isNaN(parsedProductId)) {
+      throw new BadRequestException('Invalid productId, it must be a number');
+    }
+    return await this.productService.getProduct(parsedProductId);
   }
 }
