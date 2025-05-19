@@ -18,4 +18,10 @@ export class CheckoutController {
 
     return this.checkoutService.createSession(productIdNumber);
   }
+
+  @Post('webhook')
+  async handleCheckoutWebhooks(@Body() event: any) {
+    console.log(event, 'event');
+    return this.checkoutService.handleCheckoutWebhook(event);
+  }
 }

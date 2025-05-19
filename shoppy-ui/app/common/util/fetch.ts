@@ -51,8 +51,9 @@ export const DELETE = async (url: string) => {
   return { error: '' };
 };
 
-export const GET = async <T>(url: string, tags?: string[]) => {
-  const res = await fetch(`${API_URL}/${url}`, {
+export const GET = async <T>(url: string, tags?: string[], params?: URLSearchParams) => {
+  const urlPath = params ? `${API_URL}/${url}?${params.toString()}` : `${API_URL}/${url}`;
+  const res = await fetch(urlPath, {
     method: 'GET',
     headers: {
       ...(await getHeaders()),

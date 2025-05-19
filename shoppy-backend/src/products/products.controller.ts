@@ -9,6 +9,7 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -65,8 +66,8 @@ export class ProductsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getProducts() {
-    return await this.productService.getProducts();
+  async getProducts(@Query('status') status: string) {
+    return await this.productService.getProducts(status);
   }
 
   @Delete(':productId')
